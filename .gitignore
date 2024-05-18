@@ -1,0 +1,47 @@
+# ################  Ignore extension files: ############
+
+*.pdf
+*.eps
+*.log
+*.png
+
+# ######### SPECIFIC FILES ##########33
+temp.py
+test.zip
+test01.py
+test02.py
+test*.py
+synthese-fra.csv
+NumbaTestRestric.py
+Model20_DirectNetwork.py
+
+# Do not ignore "CovidData75000.ods
+# Do not ignore "COVID-VACC_75000_purged.ods" 
+covid-hospit-2023-03-31-18h01.ods
+COVID-VACC_75000.ods
+COVID-VACC_vacsi-s-a-reg-2023-07-13-15h51.ods
+
+# ################# Auto things and OS ###########
+
+.DS_Store
+Thumbs.db
+__pycache__/
+
+
+# MeasureInletOutlet/Photos/: Ignores all files and subdirectories in the MeasureInletOutlet/Photos/ directory
+
+# ################ FOLDERS ##################
+
+BackupsCodes/
+CUDAtests/
+Deliverable/
+_Discard/
+Model11images/
+MonteCarlo/
+Presentation/
+PY126proj/
+Correction_TP1-2024_03_22/
+Barabasi/
+Barabasi/*/
+gillespie-tutorial-main/
+PY126proj/
