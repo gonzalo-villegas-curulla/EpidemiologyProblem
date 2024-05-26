@@ -259,6 +259,8 @@ def save_figure(SAVINGFIG):
 
 def FirstReac_SIR(G, beta, alpha, T, adj_matrix, edge_lengths):
     
+    print(beta)
+    
     # Initialization
     node_states = nx.get_node_attributes(G, 'state')
     
@@ -516,7 +518,7 @@ counter = 0
 PROPENS = []
     
 # +++++++++++++++++++++ SIMUALTION PARAMETERS: +++++++++++++++++++++++++++++
-seed = 0*42+12                      # Set seed of PRNG state 
+seed = 0*12 + 42                     # Set seed of PRNG state 
 rg   = Generator(PCG64(seed))  # Initialize bit generator (here PCG64) with seed
 
 beta   = np.float64(0.1)   # Infection ratio
@@ -612,8 +614,30 @@ print('(AdjMX) kmean: ', kmean)
 
 
 #  ++++++++++++++++++++ Rectify Beta for conservation ++++++++++++++++++++++
+# Procedure based on degree estimation
 
-betaMODIF = 4*beta/10
+degs = np.array(myG.degree())
+degs = degs[:,1]
+
+# Compute weights based on degree count
+MaxDeg = max(degs)
+MinDeg = min(degs)
+degvec = np.arange(MinDeg, MaxDeg+1,1)
+
+w = []
+for idx in degvec:
+    w = np.append(w, np.sum(degs == idx)) 
+    
+
+w = w/np.sum(w)
+# w = w / np.max(w)
+
+# w = np.ones(len(degvec))
+
+
+betaMODIF = beta * len(w) / np.dot(w, degvec) 
+
+betaMODIF = beta/  np.mean(degs)
 
 
 # +++++++++++++++++++++ Do Simulations +++++++++++++++++++++
@@ -730,8 +754,6 @@ plt.xlim((0,T))
 plt.show()
 
 
-degs = np.array(myG.degree())
-degs = degs[:,1]
 plt.figure()
 plt.plot(degs, 'o')
 plt.title(r"Degree")
