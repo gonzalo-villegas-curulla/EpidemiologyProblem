@@ -520,7 +520,6 @@ seed = 0*42+12                      # Set seed of PRNG state
 rg   = Generator(PCG64(seed))  # Initialize bit generator (here PCG64) with seed
 
 beta   = np.float64(0.1)   # Infection ratio
-betaNTW = beta/8
 
 
 alpha  = np.float64(0.03)  # Recovery rate
@@ -546,7 +545,7 @@ A  = Lx*Ly # Area
 dh = np.sqrt(A/N) # Regularized grid step
 
 Rthr      = 3*dh  *1.045*np.sqrt(2) # R-distance for node-neighbors
-Excent    = 10*dh # Randmzd. particle movement from homogeneous distribution post.
+Excent    = 0*10*dh # Randmzd. particle movement from homogeneous distribution post.
 BoundDist = 0.9 # Distance of particles to boundaries of domain
 
 
@@ -612,6 +611,11 @@ kmean = np.mean(np.sum(adj_matrix,axis=1))
 print('(AdjMX) kmean: ', kmean)
 
 
+#  ++++++++++++++++++++ Rectify Beta for conservation ++++++++++++++++++++++
+
+betaMODIF = 4*beta/10
+
+
 # +++++++++++++++++++++ Do Simulations +++++++++++++++++++++
 
 # SIR ODE's =================================
@@ -650,7 +654,7 @@ for IdxSimul in range(NumSimuls):
         G.nodes[i]['state'] = state
 
 
-    X_t, Sinf[IdxSimul] = FirstReac_SIR(G, betaNTW, alpha, T, adj_matrix, edge_lengths)
+    X_t, Sinf[IdxSimul] = FirstReac_SIR(G, betaMODIF, alpha, T, adj_matrix, edge_lengths)
     X_array.append(X_t)
 
     if flagonce:
@@ -733,7 +737,7 @@ plt.plot(degs, 'o')
 plt.title(r"Degree")
 
 
-print('PROPENS.\nMean: ', np.mean(PROPENS), '. STD: ', np.std(PROPENS), '. MED: ', np.median(PROPENS))
+print('PROPENS. Mean: ', np.mean(PROPENS), '. STD: ', np.std(PROPENS), '. MED: ', np.median(PROPENS))
 
 
 # %%
