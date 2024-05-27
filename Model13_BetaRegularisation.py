@@ -107,7 +107,7 @@ def update_states(G, X, tau, i_selected, adj_matrix, edge_lengths):
     node_indices = list(nx.get_node_attributes(G, 'tau'))
 
     # Get node id corresponding to reaction channel i_0
-    i_node = node_indices[i_selected] # next node triggered/event'ed
+    TRIG_node = node_indices[i_selected] # next node triggered/event'ed
 
     # == Update waiting times for remaining node =====
     
@@ -119,7 +119,7 @@ def update_states(G, X, tau, i_selected, adj_matrix, edge_lengths):
     # ===== Update network state: =====
     
     # i_node TRIGGERED event
-    prev_state = G.nodes[i_node]['state']
+    prev_state = G.nodes[TRIG_node]['state']
 
 
     if prev_state==0: # S-> I
@@ -128,39 +128,39 @@ def update_states(G, X, tau, i_selected, adj_matrix, edge_lengths):
         I += 1
 
         # +1 (S -> I): 
-        G.nodes[i_node]['state'] = 1
+        G.nodes[TRIG_node]['state'] = 1
 
         # n*Beta --> alpha
-        G.nodes[i_node]['lambda'] = alpha
+        G.nodes[TRIG_node]['lambda'] = alpha
         
         # Draw new waiting time for i_selected::i_node :
         u_i = rg.random()
-        G.nodes[i_node]['tau'] = -np.log(1. - u_i) / alpha
+        G.nodes[TRIG_node]['tau'] = -np.log(1. - u_i) / alpha
 
         # Update propensities of i's NEIGHBOURS:
-        susceptible_neighbors = np.array([j for j in G.neighbors(i_node) if G.nodes[j]['state']==0])
+        susceptible_neighbors = np.array([j for j in G.neighbors(TRIG_node) if G.nodes[j]['state']==0])
 
 
-        # (i_node) can infect (susceptible_neighbors)
+        # (TRIG_node) can infect (susceptible_neighbors)
 
-        neighbors = np.array([j for j in G.neighbors(i_node)])
+        neighbors = np.array([j for j in G.neighbors(TRIG_node)])
         total_contact_surface = 0
         for idx in range(len(neighbors)):
-            total_contact_surface += edge_lengths.get((i_node,neighbors[idx]))
+            total_contact_surface += edge_lengths.get((TRIG_node,neighbors[idx]))
 
         if len(susceptible_neighbors)>0:
             for j in susceptible_neighbors: 
                 # Update j's propensity:
-                common_surface = edge_lengths.get((i_node,j))
+                common_surface = edge_lengths.get((TRIG_node , j))
                 if use_VDcontact:
-                    G.nodes[j]['lambda'] += (beta )* ( 1+ 1*common_surface/total_contact_surface)
+                    G.nodes[j]['lambda'] += (betaMODIF )* ( 1+ 1*common_surface/total_contact_surface)
                     # PROPENS.append(  1+ 1*common_surface/total_contact_surface)
                     PROPENS.append(  G.nodes[j]['lambda'])
                     
                     
                     
                 else:
-                    G.nodes[j]['lambda'] += beta 
+                    G.nodes[j]['lambda'] += betaMODIF 
                     PROPENS.append(  G.nodes[j]['lambda'])
                    
                 # Draw new waiting time for j:
@@ -173,19 +173,19 @@ def update_states(G, X, tau, i_selected, adj_matrix, edge_lengths):
         R += 1
 
         # Update state of node in graph: 
-        G.nodes[i_node]['state'] = 2
+        G.nodes[TRIG_node]['state'] = 2
 
         # Remove i from reaction channels:
-        G.nodes[i_node]['lambda'] = 0.
-        del G.nodes[i_node]['tau']
+        G.nodes[TRIG_node]['lambda'] = 0.
+        del G.nodes[TRIG_node]['tau']
 
         # Update propensities of i's neighbors:
-        susceptible_neighbors = np.array([j for j in G.neighbors(i_node) if G.nodes[j]['state']==0])
+        susceptible_neighbors = np.array([j for j in G.neighbors(TRIG_node) if G.nodes[j]['state']==0])
 
         if len(susceptible_neighbors)>0:
             for j in susceptible_neighbors:            
                 # Update j's propensity:
-                G.nodes[j]['lambda'] -= beta
+                G.nodes[j]['lambda'] -= betaMODIF
                                    
                 # If node propensity is zero remove channel:
                 if np.isclose(G.nodes[j]['lambda'], 0.):
@@ -258,9 +258,7 @@ def save_figure(SAVINGFIG):
 
 
 def FirstReac_SIR(G, beta, alpha, T, adj_matrix, edge_lengths):
-    
-    print(beta)
-    
+        
     # Initialization
     node_states = nx.get_node_attributes(G, 'state')
     
@@ -619,25 +617,24 @@ print('(AdjMX) kmean: ', kmean)
 degs = np.array(myG.degree())
 degs = degs[:,1]
 
-# Compute weights based on degree count
-MaxDeg = max(degs)
-MinDeg = min(degs)
-degvec = np.arange(MinDeg, MaxDeg+1,1)
+betaMODIF = beta
 
-w = []
-for idx in degvec:
-    w = np.append(w, np.sum(degs == idx)) 
-    
+I_nodes = [int(rg.random()*N)]
+I_nodes = int(N/2)
+# I_nodes = [0]
+R_nodes = []
 
-w = w/np.sum(w)
-# w = w / np.max(w)
+states = np.zeros(N, dtype=int) # Default to State=0 everywhere
+states[I_nodes] = 1
+states[R_nodes] = 2
 
-# w = np.ones(len(degvec))
+nx.set_node_attributes(myG, 'state', 0)
+for i,state in enumerate(states):
+    myG.nodes[i]['state'] = state
+_ = FirstReac_SIR(myG, betaMODIF, alpha, T, adj_matrix, edge_lengths)
 
 
-betaMODIF = beta * len(w) / np.dot(w, degvec) 
-
-betaMODIF = beta/  np.mean(degs)
+betaMODIF = betaMODIF*beta/np.mean(PROPENS)
 
 
 # +++++++++++++++++++++ Do Simulations +++++++++++++++++++++
@@ -694,7 +691,7 @@ plt.figure()
 plt.plot(PROPENS, 'o')
 plt.grid()
 plt.title(r"Beta Basic: {:.3f}".format(beta))
-
+plt.plot((0,len(PROPENS)),(beta,beta),'--r')
 
 
 # +++++++++++++++++++++ Plot Simulation Results +++++++++++++++++++++
