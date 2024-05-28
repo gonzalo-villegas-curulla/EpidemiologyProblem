@@ -1,9 +1,9 @@
-Hello, this is just a quick an dirty showcase of some simulation results in time domain:
+This is just a `quick and dirty` showcase of some simulation results in time domain. Of course, I have skipped a lot of steps of how I got to this. Things to come will complete the information about what is being done.
 
 
+![](assets/Voronoi120fps.gif)
 
 
-[![Watch the video](https://github.com/gonzalo-villegas-curulla/EpidemiologyProblem/blob/master/Videos/casVoronoiTessellation/image_1489.png)](https://githubusercontent.com/gonzalo-villegas-curulla/EpidemiologyProblem/master/assets/RseauVoronoi_120fps.mp4)
 
 
 
