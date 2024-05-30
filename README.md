@@ -27,15 +27,12 @@ The latter is a stockastic representation of a chain of reactions. The approach 
 The deterministic model in its simplest form and without integro-differential terms (CITATION) can be summed up as
 
 
-![\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}](https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a})
-
-
 ![\Large \frac{d}{dt}S(t)=-\beta\frac{S(t)I(t)}{N}](https://latex.codecogs.com/svg.latex?\Large&space;\frac{d}{dt}S(t)=-\beta\frac{S(t)I(t)}{N})
 
 
-\frac{d}{dt}I(t) = +\beta \frac{S(t)I(t)}{N} - \alpha I(t)
+![\Large \frac{d}{dt}I(t)=+\beta\frac{S(t)I(t)}{N}-\alphaI(t)](https://latex.codecogs.com/svg.latex?\Large&space;\frac{d}{dt}I(t)=+\beta\frac{S(t)I(t)}{N}-\alpha I(t))
 
-\frac{d}{dt}R(t) = +\alpha I(t)
+![\Large \frac{d}{dt}R(t)=+\alphaI(t)](https://latex.codecogs.com/svg.latex?\Large&space;\frac{d}{dt}R(t)=+\alphaI(t))
 
 
 
