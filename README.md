@@ -15,7 +15,7 @@ Appealing? Let's dive into what we are doing.
 
 First off, we are dealing with so-called compartmented models. They can be a series of groups governed by a set of differential equations or a set of chemical reactions or events happening within a given domain.
 
-The first case responds to the deterministic representation of such process as an epidemic as described in the early papers of Kermack and McKendrick at the end of 1920s.
+The first case responds to the deterministic representation of such process as an epidemic as described in the early papers of Kermack and McKendrick at the end of 1920s (`citation`).
 The latter is a stockastic representation of a chain of reactions. The approach here is a Gillespie discretisation.
 
 
@@ -24,7 +24,7 @@ The latter is a stockastic representation of a chain of reactions. The approach 
 
 ## Deterministic models
 
-The deterministic model in its simplest form and without integro-differential terms (CITATION) can be summed up as
+The deterministic model in its simplest form and without integro-differential terms (`citation`) can be summed up as
 
 ![\Large \frac{d}{dt}S(t)=-\beta\frac{S(t)I(t)}{N}](https://latex.codecogs.com/svg.latex?\Large&space;\frac{d}{dt}S(t)=-\beta\frac{S(t)I(t)}{N})
 
@@ -49,18 +49,18 @@ No matter what model variation we choose (SEIR, SEIRVD, SES...) each simulation 
 
 ### Simple case
 
-The steps followed 
-Create a network
-Set N nodes
-Infect one node (somewhere in the network)
-Draw events and advance time
+The steps followed: 
+* Create a network
+* Set N nodes
+* Infect one node (somewhere in the network)
+* Draw events and advance time
 
 
-#### (Simple case) Details
+#### `Simple case` Details
 
-Compute the node's propentity
-Compute the Poisson sequences for each node
-Draw the mowest waiting time
+1. Compute the node's propentity
+2. Compute the Poisson sequences for each node
+3. Draw the mowest waiting time
 
 
 
@@ -73,7 +73,7 @@ The nodes may be distributed homogeneously, regularly, arbitrarily (this is fram
 
 
 
-#### (Involved case) The degree `k` of the network's nodes
+#### `Involved case` The degree `k` of the network's nodes
 
 The degree distribution:
 
