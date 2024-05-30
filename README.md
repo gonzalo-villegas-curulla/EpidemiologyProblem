@@ -36,6 +36,10 @@ The deterministic model in its simplest form and without integro-differential te
 
 
 
+`S` is the group of susceptible individuals (not yet infected); `I` those infected (and infectious!); finally, `R` stands for the removed group, be that by healing or death. There are two ratios: $\beta$ and $\alpha$. The first one reflects the rate at which an sn exposed subject becomes infected; the latter is the rate at which the infected people become removed. Finally, the transition from group to group are normalised by `N`, the population volume.
+
+ 
+
 This is seen easily in the Python file `Model01.py`.
 
 
