@@ -29,9 +29,9 @@ The deterministic model in its simplest form and without integro-differential te
 
 ![\Large \frac{d}{dt}S(t)=-\beta\frac{S(t)I(t)}{N}](https://latex.codecogs.com/svg.latex?\Large&space;\frac{d}{dt}S(t)=-\beta\frac{S(t)I(t)}{N})
 
-
+a
 ![\Large \frac{d}{dt}I(t)=+\beta\frac{S(t)I(t)}{N}-\alphaI(t)](https://latex.codecogs.com/svg.latex?\Large&space;\frac{d}{dt}I(t)=+\beta\frac{S(t)I(t)}{N}-\alphaI(t))
-
+b
 ![\Large \frac{d}{dt}R(t)=+\alphaI(t)](https://latex.codecogs.com/svg.latex?\Large&space;\frac{d}{dt}R(t)=+\alphaI(t))
 
 
