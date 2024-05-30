@@ -33,7 +33,7 @@ The deterministic model in its simplest form and without integro-differential te
 ![\Large \frac{d}{dt}R(t)=+I(t)\alpha](https://latex.codecogs.com/svg.latex?\Large&space;\frac{d}{dt}R(t)=+I(t)\alpha)
 
 
-`S` is the group of susceptible individuals (not yet infected); `I` those infected (and infectious!); finally, `R` stands for the removed group, be that by healing or death. There are two ratios: $\beta$ and $\alpha$. The first one reflects the rate at which an sn exposed subject becomes infected; the latter is the rate at which the infected people become removed. Finally, the transition from group to group are normalised by `N`, the population volume.
+`S` is the group of susceptible individuals (not yet infected); `I` those infected (and infectious!); finally, `R` stands for the removed group, be that by healing or death. There are two ratios: $\beta$ and $\alpha$. The first one reflects the rate at which an sn exposed subject becomes infected; the latter is the rate at which the infected people become removed. Finally, the transition from group to group are normalised by `N`, the population volume. Note that so far we have considered the ratios as constant real-valued coefficients with units of inverted time.
 
  
 
