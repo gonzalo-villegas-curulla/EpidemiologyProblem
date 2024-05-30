@@ -26,20 +26,11 @@ The latter is a stockastic representation of a chain of reactions. The approach 
 
 The deterministic model in its simplest form and without integro-differential terms (CITATION) can be summed up as
 
-
 ![\Large \frac{d}{dt}S(t)=-\beta\frac{S(t)I(t)}{N}](https://latex.codecogs.com/svg.latex?\Large&space;\frac{d}{dt}S(t)=-\beta\frac{S(t)I(t)}{N})
-
-a
-
 
 ![\Large \frac{d}{dt}I(t)=+\beta\frac{S(t)I(t)}{N}-I(t)\alpha](https://latex.codecogs.com/svg.latex?\Large&space;\frac{d}{dt}I(t)=+\beta\frac{S(t)I(t)}{N}-I(t)\alpha)
 
-
-b
-
-
 ![\Large \frac{d}{dt}R(t)=+I(t)\alpha](https://latex.codecogs.com/svg.latex?\Large&space;\frac{d}{dt}R(t)=+I(t)\alpha)
-
 
 
 `S` is the group of susceptible individuals (not yet infected); `I` those infected (and infectious!); finally, `R` stands for the removed group, be that by healing or death. There are two ratios: $\beta$ and $\alpha$. The first one reflects the rate at which an sn exposed subject becomes infected; the latter is the rate at which the infected people become removed. Finally, the transition from group to group are normalised by `N`, the population volume.
