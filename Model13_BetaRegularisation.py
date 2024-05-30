@@ -98,7 +98,7 @@ def next_event(G):
 ########################################################
 
 def update_states(G, X, tau, i_selected, adj_matrix, edge_lengths):
-    global global_iteration_count
+    # global global_iteration_count
     # State counts:
     global PROPENS
     S, I, R = X
@@ -516,30 +516,29 @@ counter = 0
 PROPENS = []
     
 # +++++++++++++++++++++ SIMUALTION PARAMETERS: +++++++++++++++++++++++++++++
-seed = 0*12 + 42                     # Set seed of PRNG state 
+seed = 42                     # Set seed of PRNG state 
 rg   = Generator(PCG64(seed))  # Initialize bit generator (here PCG64) with seed
 
 beta   = np.float64(0.1)   # Infection ratio
 
-
 alpha  = np.float64(0.03)  # Recovery rate
 
-N      = np.int32(500)    # Number of nodes
+N      = np.int32(220)    # Number of nodes
 T      = np.float64(300)   # Time of simulation
 
-NumSimuls   = np.int32(20)
+NumSimuls   = np.int32(2)
 
 visual_time           = 0 # Visualize network infection in time steps
 visual_SaveVideo      = 0 # [CAREFULL!!!], it takes hours
-visual_NTWX           = 0 # View networkx object
-visual_VDtessellation = 0 # See Voronoi tessellation of domain
+visual_NTWX           = 1 # View networkx object
+visual_VDtessellation = 1 # See Voronoi tessellation of domain
 use_VDcontact         = 0 # Use contact surface/edge for transmission propensity
-visual_AllGroups      = 0 # See S-I-R (True), only (I) if False.
+visual_AllGroups      = -1 # See S-I-R (1), only (I) if (0), (-1) for none 
 
 
 ## +++++++++++++++++++++ PARMETERS DOMAIN GRID +++++++++++++++++++++
 
-Lx = np.float64(50)  
+Lx = np.float64(40)  
 Ly = np.float64(40)  
 A  = Lx*Ly # Area
 dh = np.sqrt(A/N) # Regularized grid step
@@ -547,6 +546,9 @@ dh = np.sqrt(A/N) # Regularized grid step
 Rthr      = 3*dh  *1.045*np.sqrt(2) # R-distance for node-neighbors
 Excent    = 0*10*dh # Randmzd. particle movement from homogeneous distribution post.
 BoundDist = 0.9 # Distance of particles to boundaries of domain
+
+Rthr   = 20.045*np.sqrt(2)*dh
+Excent = 6*dh
 
 
 #####################################################################
@@ -634,12 +636,12 @@ for i,state in enumerate(states):
 _ = FirstReac_SIR(myG, betaMODIF, alpha, T, adj_matrix, edge_lengths)
 
 
-betaMODIF = betaMODIF*beta/np.mean(PROPENS)
+# betaMODIF = betaMODIF*beta/np.mean(PROPENS) # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 # +++++++++++++++++++++ Do Simulations +++++++++++++++++++++
 
-# SIR ODE's =================================
+# =====================  SIR ODE's =================================
 
 tdet, Sdet, Idet, Rdet = Model01_func( T, beta, alpha, N)
 
@@ -650,7 +652,7 @@ if 0:
     plt.plot(tdet, Rdet,'g')
 
 
-# SIR Stockastic ============================
+# ===================  SIR Stockastic ============================
 X_array = []
 
 Sinf = np.zeros(NumSimuls)
@@ -695,8 +697,6 @@ plt.plot((0,len(PROPENS)),(beta,beta),'--r')
 
 
 # +++++++++++++++++++++ Plot Simulation Results +++++++++++++++++++++
-fig = plt.figure(4)
-ax  = plt.subplot()
 
 IMAX  = []
 TIMAX = []
@@ -707,48 +707,51 @@ Tvec  = []
 
 # TIME DOMAIN Simulation Series +++++++++++++++++++++++++
 
-for X_t in X_array:
-    
-    Tvec.append(X_t[0:1,:])
-    Sdata.append(np.array(X_t[1:2,:]) )
-    Idata.append(X_t[2:3,:])
-    Rdata.append(X_t[3:4,:])
-    
-    if visual_AllGroups: # Plot All data sets
-        tImax = np.argmax(X_t[2,:])
-        tvec = X_t[0,:]
-        thisT = tvec[tImax]
-        TIMAX.append(thisT)
-        IMAX.append(np.max(X_t[2,:]))
-        colors  = ['b','r','g']
-        [ax.plot(X_t[0,:],X_,'o',c=c_,alpha=1/NumSimuls) for X_, c_ in zip(X_t[1:,:], colors)] 
-        legends = [r'$N_S$',r'$N_I$',r'$N_R$']
-        ax.legend(legends)
-    
-    else: # Plot Only infected I(t)
-        tImax = np.argmax(X_t[2,:])
-        tvec = X_t[0,:]
-        thisT = tvec[tImax]
-        TIMAX.append(thisT)
-        IMAX.append(np.max(X_t[2,:]))
-        colors  = ['r']
-        [ax.plot(X_t[0,:], X_ ,'o',c='r',alpha=1/NumSimuls) for X_, c_ in zip(X_t[2:3,:],colors)] 
+if visual_AllGroups!=-1:
+    fig = plt.figure(4)
+    ax  = plt.subplot()
+    for X_t in X_array:
         
-        # plt.plot([thisT,thisT],[0,N],':k', alpha=0.125) # <<<<<<<<< Imax
-        legends = [r'$N_I$']     
-        ax.legend(legends)
-print('T(Imax) moyen: ', np.mean(TIMAX))   
-print('Imax moyen: ', np.mean(IMAX), " (Imax/N: ",np.mean(IMAX)/N,")" )
+        Tvec.append(X_t[0:1,:])
+        Sdata.append(np.array(X_t[1:2,:]) )
+        Idata.append(X_t[2:3,:])
+        Rdata.append(X_t[3:4,:])
+        
+        if visual_AllGroups==1: # Plot All data sets
+            tImax = np.argmax(X_t[2,:])
+            tvec = X_t[0,:]
+            thisT = tvec[tImax]
+            TIMAX.append(thisT)
+            IMAX.append(np.max(X_t[2,:]))
+            colors  = ['b','r','g']
+            [ax.plot(X_t[0,:],X_,'o',c=c_,alpha=1/NumSimuls) for X_, c_ in zip(X_t[1:,:], colors)] 
+            legends = [r'$N_S$',r'$N_I$',r'$N_R$']
+            ax.legend(legends)
+        
+        elif visual_AllGroups==0: # Plot Only infected I(t)
+            tImax = np.argmax(X_t[2,:])
+            tvec = X_t[0,:]
+            thisT = tvec[tImax]
+            TIMAX.append(thisT)
+            IMAX.append(np.max(X_t[2,:]))
+            colors  = ['r']
+            [ax.plot(X_t[0,:], X_ ,'o',c='r',alpha=1/NumSimuls) for X_, c_ in zip(X_t[2:3,:],colors)] 
+            
+            # plt.plot([thisT,thisT],[0,N],':k', alpha=0.125) # <<<<<<<<< Imax
+            legends = [r'$N_I$']     
+            ax.legend(legends)
+    print('T(Imax) moyen: ', np.mean(TIMAX))   
+    print('Imax moyen: ', np.mean(IMAX), " (Imax/N: ",np.mean(IMAX)/N,")" )
 
      
-plt.plot(tdet, Idet, 'k')   
-plt.xlabel(r"Temps [jours]")
-plt.ylabel(r"Numéro de cas")
-degs = np.array(myG.degree())
-degs = degs[:,1]
-plt.title(r"Solutions SIR Gillespie. Degré moyen: {:.2f}".format(np.mean(degs)))
-plt.xlim((0,T))
-plt.show()
+    plt.plot(tdet, Idet, 'k')   
+    plt.xlabel(r"Temps [jours]")
+    plt.ylabel(r"Numéro de cas")
+    degs = np.array(myG.degree())
+    degs = degs[:,1]
+    plt.title(r"Solutions SIR Gillespie. Degré moyen: {:.2f}".format(np.mean(degs)))
+    plt.xlim((0,T))
+    plt.show()
 
 
 plt.figure()
@@ -757,8 +760,43 @@ plt.title(r"Degree")
 
 
 print('PROPENS. Mean: ', np.mean(PROPENS), '. STD: ', np.std(PROPENS), '. MED: ', np.median(PROPENS))
+print('PropensMean/Beta: ', np.mean(PROPENS)/beta)
+# 29/05/2024
+
+vpAdj, VPAdj = np.linalg.eig(adj_matrix)
 
 
+lapl = nx.laplacian_matrix(myG)
+lapl = lapl.toarray()
+vplapl, VPlapl = np.linalg.eig(lapl)
+vplapl_sort = np.sort(vplapl)
+
+SG = np.max(vplapl) - vplapl_sort[1]
+print('Spectral gap: ', SG)
+
+# plt.pcolor( np.log( ) )
+plt.figure()
+plt.spy(adj_matrix)
+plt.title('adj MX')
+
+plt.figure()
+plt.pcolor(lapl)
+plt.title(r"lapl")
+
+
+plt.figure()
+plt.plot(np.real(vpAdj),'o')
+plt.plot(np.real(vplapl),'o')
+plt.legend(['adj','lapl'])
+plt.grid()
+
+plt.figure()
+plt.pcolor(abs(VPAdj))
+plt.title(r"vec prop ADJ MX")
+
+plt.figure()
+plt.pcolor(abs(VPlapl))
+plt.title(r"vec prop Lapl")
 # %%
 
 
@@ -844,7 +882,6 @@ plt.title(r"I sur S")
 
 # EIGENVALUES: adjMX et Laplacian(adjMX) ================================
 
-
 vpAdj, VPAdj = np.linalg.eig(adj_matrix)
 plt.figure()
 
@@ -903,8 +940,6 @@ if 0:
 
 # +++++++++++++++++++++ Some statistics +++++++++++++++++++++
 
-degs = np.array(myG.degree())
-degs = degs[:,1]
 meandeg = np.mean(degs)
 Ro_estim = ((np.var(degs)+(np.mean(degs))**2))/np.mean(degs) - 1
 print('(NTWRK) Av Node k-degree: ', meandeg)
