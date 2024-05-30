@@ -1,12 +1,12 @@
 # A few representations of epidemiology-like processes
 
-Right below you see a `quick and dirty` showcase of some simulation results in time domain. Of course, I have skipped a lot of steps of how I got to this. Things to come will complete the information about what is being done.
+Right below you see a quick and dirty showcase of some simulation results in time domain. Of course, I have skipped a lot of steps of how I got to this. Things to come will complete the information about what is being done.
 
 
 ![](assets/Voro5.gif)
 
 
-Appealing, right? What are we doing here? Let's 
+Appealing? Let's dive into what we are doing.
 
 
 
@@ -29,6 +29,13 @@ The deterministic model in its simplest form and without integro-differential te
 
 ![\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}](https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a})
 
+
+![\Large \frac{d}{dt}S(t) = -\beta \frac{S(t) I(t)}{N} ](https://latex.codecogs.com/svg.latex?\Large&space;\frac{d}{dt}S(t) = -\beta \frac{S(t) I(t)}{N})
+
+
+\frac{d}{dt}I(t) = +\beta \frac{S(t)I(t)}{N} - \alpha I(t)
+
+\frac{d}{dt}R(t) = +\alpha I(t)
 
 
 
