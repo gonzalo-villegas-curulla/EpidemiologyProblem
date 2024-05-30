@@ -16,7 +16,7 @@ Appealing? Let's dive into what we are doing.
 First off, we are dealing with so-called compartmented models. They can be a series of groups governed by a set of differential equations or a set of chemical reactions or events happening within a given domain.
 
 The first case responds to the deterministic representation of such process as an epidemic as described in the early papers of Kermack and McKendrick at the end of 1920s (`citation`).
-The latter is a stockastic representation of a chain of reactions. The approach here is a Gillespie discretisation.
+The latter is a stochastic representation of a chain of reactions. The approach here is a Gillespie discretisation.
 
 
 
@@ -40,9 +40,9 @@ The deterministic model in its simplest form and without integro-differential te
 This is seen easily in the Python file `Model01.py`.
 
 
-## Stockastic models (Gillespie)
+## Stochastic models (Gillespie)
 
-No matter what model variation we choose (SEIR, SEIRVD, SES...) each simulation with the same parameters will yield the same results. This is overcome with a probability approach in deciding wichi reaction (see event) will happen next and at what time. In other words, whether an infection or a removal will happen, at which node and what node has the smallest waiting time based on on a probability distribution.
+No matter what model variation we choose (SEIR, SEIRVD, SES...) each simulation with the same parameters will yield the same results. This is overcome with a probability approach in deciding which reaction (see event) will happen next and at what time. In other words, whether an infection or a removal will happen, at which node and what node has the smallest waiting time based on on a probability distribution.
 
 
 
@@ -56,7 +56,7 @@ The steps followed:
 * Draw events and advance time
 
 
-#### `Simple case` Details
+#### `(Simple case)` Details
 
 1. Compute the node's propentity
 2. Compute the Poisson sequences for each node
@@ -66,20 +66,20 @@ The steps followed:
 
 ### Involved case: domain tessellation
 
-The nodes may be distributed homogeneously, regularly, arbitrarily (this is framed within the context of Random-Sequential-Adsorption [RSA](https://en.wikipedia.org/wiki/Random_sequential_adsorption), hyper/uniformity, etc. to be discussed later CITATIONS: Torquato, Hinrichsen, Norris, Connoir, Rohfritsch). One may want to draw polygons around the nodes and treach each one as the baricenter of a Voronoi cell. Now we have two new criteria between neighbors: the node-to-node distance and the length of the shared fae between two cells.
+The nodes may be distributed homogeneously, regularly, arbitrarily (this is framed within the context of Random-Sequential-Adsorption [RSA](https://en.wikipedia.org/wiki/Random_sequential_adsorption), hyper-uniformity, etc. to be discussed later `citations`: Torquato, Hinrichsen, Norris, Connoir, Rohfritsch). One may want to draw polygons around the nodes and treach each one as the baricenter of a Voronoi cell. Now we have two new criteria between neighbors: the node-to-node distance and the length of the shared fae between two cells.
 
 
 
 
 
 
-#### `Involved case` The degree `k` of the network's nodes
+#### `(Involved case)` The degree `k` of the network's nodes
 
-The degree distribution:
+* The degree distribution:
 
-The approximations of the degree distribution:
+* The approximations of the degree distribution:
 
-Applications and moments of `k`:
+* Moments and applications of `k`:
 
 
 
