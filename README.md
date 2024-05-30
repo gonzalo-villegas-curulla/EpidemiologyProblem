@@ -3,7 +3,7 @@
 Right below you see a `quick and dirty` showcase of some simulation results in time domain. Of course, I have skipped a lot of steps of how I got to this. Things to come will complete the information about what is being done.
 
 
-![](assets/Voro4.gif)
+![](assets/Voro5.gif)
 
 
 Appealing, right? What are we doing here? Let's 
