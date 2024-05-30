@@ -27,6 +27,10 @@ The latter is a stockastic representation of a chain of reactions. The approach 
 The deterministic model in its simplest form and without integro-differential terms (CITATION) can be summed up as
 
 
+![\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}](https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a})
+
+
+
 
 This is seen easily in the Python file `Model01.py`.
 
@@ -57,7 +61,7 @@ Draw the mowest waiting time
 
 ### Involved case: domain tessellation
 
-The nodes may be distributed homogeneously, regularly, arbitrarily (this is framed within the context of Random-Sequential-Adsorption, hyper/uniformity, etc. to be discussed later CITATIONS: Torquato, Hinrichsen, Norris, Connoir, Rohfritsch). One may want to draw polygons around the nodes and treach each one as the baricenter of a Voronoi cell. Now we have two new criteria between neighbors: the node-to-node distance and the length of the shared fae between two cells.
+The nodes may be distributed homogeneously, regularly, arbitrarily (this is framed within the context of Random-Sequential-Adsorption [RSA](https://en.wikipedia.org/wiki/Random_sequential_adsorption), hyper/uniformity, etc. to be discussed later CITATIONS: Torquato, Hinrichsen, Norris, Connoir, Rohfritsch). One may want to draw polygons around the nodes and treach each one as the baricenter of a Voronoi cell. Now we have two new criteria between neighbors: the node-to-node distance and the length of the shared fae between two cells.
 
 
 
