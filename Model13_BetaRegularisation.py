@@ -528,14 +528,14 @@ alpha  = np.float64(0.03)  # Recovery rate
 N      = np.int32(220)    # Number of nodes
 T      = np.float64(300)   # Time of simulation
 
-NumSimuls   = np.int32(2)
+NumSimuls   = np.int32(20)
 
 visual_time           = 0 # Visualize network infection in time steps
 visual_SaveVideo      = 0 # [CAREFULL!!!], it takes hours
 visual_NTWX           = 1 # View networkx object
 visual_VDtessellation = 1 # See Voronoi tessellation of domain
 use_VDcontact         = 0 # Use contact surface/edge for transmission propensity
-visual_AllGroups      = -1 # See S-I-R (1), only (I) if (0), (-1) for none 
+visual_AllGroups      = 0 # See S-I-R (1), only (I) if (0), (-1) for none 
 
 
 ## +++++++++++++++++++++ PARMETERS DOMAIN GRID +++++++++++++++++++++
@@ -622,21 +622,21 @@ degs = np.array(myG.degree())
 degs = degs[:,1]
 
 betaMODIF = beta
-betaMODIF = beta * np.mean(degs)/np.max(degs) # I LIKE THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<
+betaMODIF = 0.9*beta * np.mean(degs)/np.max(degs) # I LIKE THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-I_nodes = [int(rg.random()*N)]
-I_nodes = int(N/2)
-# I_nodes = [0]
-R_nodes = []
+# I_nodes = [int(rg.random()*N)]
+# I_nodes = int(N/2)
+# # I_nodes = [0]
+# R_nodes = []
 
-states = np.zeros(N, dtype=int) # Default to State=0 everywhere
-states[I_nodes] = 1
-states[R_nodes] = 2
+# states = np.zeros(N, dtype=int) # Default to State=0 everywhere
+# states[I_nodes] = 1
+# states[R_nodes] = 2
 
-nx.set_node_attributes(myG, 'state', 0)
-for i,state in enumerate(states):
-    myG.nodes[i]['state'] = state
-_ = FirstReac_SIR(myG, betaMODIF, alpha, T, adj_matrix, edge_lengths)
+# nx.set_node_attributes(myG, 'state', 0)
+# for i,state in enumerate(states):
+#     myG.nodes[i]['state'] = state
+# _ = FirstReac_SIR(myG, betaMODIF, alpha, T, adj_matrix, edge_lengths)
 
 
 # betaMODIF = betaMODIF*beta/np.mean(PROPENS) # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
