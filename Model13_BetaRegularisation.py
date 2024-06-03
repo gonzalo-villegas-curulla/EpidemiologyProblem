@@ -549,8 +549,8 @@ Rthr      = 3*dh  *1.045*np.sqrt(2) # R-distance for node-neighbors
 Excent    = 10*dh # Randmzd. particle movement from homogeneous distribution post.
 BoundDist = 0.9 # Distance of particles to boundaries of domain
 
-Rthr   = 1.045*np.sqrt(2)*dh
-Excent = 0.001*dh
+Rthr   = 2.045*np.sqrt(2)*dh
+Excent = 1.005*dh
 
 
 #####################################################################
@@ -650,8 +650,8 @@ for IdxSimul in range(NumSimuls):
     G = myG.copy()
 
     I_nodes = [int(rg.random()*N)]
-    # I_nodes = int(N/2)
-    I_nodes = [0]
+    I_nodes = int(N/2)
+    # I_nodes = [0]
     R_nodes = []
 
     states = np.zeros(N, dtype=int) # Default to State=0 everywhere

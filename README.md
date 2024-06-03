@@ -55,6 +55,10 @@ The steps followed:
 * Infect one node (somewhere in the network)
 * Draw events and advance time
 
+ADDITIONALLY:
+* For network's node distributions close to rectangular/regular, the measured average propensities is ca. $30\%$ over the value of $\beta$
+* For network's node distributions increased by an arbitrary maximal amplitude of the order of magnitude of $1dh$ (where $dh$ is the node-to-node distance in the primay rectangular distribution), the devitation of the `PROPENSITY` with respect to $\beta$ is reduced to $3\%$ to $10\%$
+
 
 #### `(Simple case)` Details
 
