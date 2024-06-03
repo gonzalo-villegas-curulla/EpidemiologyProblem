@@ -462,13 +462,15 @@ def do_tessellation(Lx_, Ly_, positions_, R_):
     x_, y_ = boundary.T
     
     if visual_VDtessellation:
+        plt.figure(1)
+        plt.clf()
         plt.xlim(round(x_.min() - 1), round(x_.max() + 1))
         plt.ylim(round(y_.min() - 1), round(y_.max() + 1))
         plt.plot(*positions_.T, 'b.')
 
     boundary_polygon = Polygon(boundary)
-    boundedpols = []
-    diameter_ = np.linalg.norm(boundary.ptp(axis=0))
+    boundedpols      = []
+    diameter_        = np.linalg.norm(boundary.ptp(axis=0))
 
     for p_ in voronoi_polygons(Voronoi(positions_), diameter_):
         x, y = zip(*p_.intersection(boundary_polygon).exterior.coords)
@@ -602,7 +604,8 @@ for i in range(num_nodes):
 edge_lengths, adj_matrix, boundedpols = do_tessellation(Lx, Ly, positions, Rthr)
 
 if visual_NTWX:
-    plt.figure()
+    plt.figure(2)
+    plt.clf()
     nx.draw(myG, pos=position_dict, with_labels=True)
     ax = plt.gca()
     ax.axis('equal')
@@ -614,12 +617,12 @@ print('(AdjMX) kmean: ', kmean)
 
 
 #  ++++++++++++++++++++ Rectify Beta for conservation ++++++++++++++++++++++
-# Procedure based on degree estimation
 
 degs = np.array(myG.degree())
 degs = degs[:,1]
 
 betaMODIF = beta
+betaMODIF = beta * np.mean(degs)/np.max(degs) # I LIKE THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 I_nodes = [int(rg.random()*N)]
 I_nodes = int(N/2)
@@ -637,6 +640,9 @@ _ = FirstReac_SIR(myG, betaMODIF, alpha, T, adj_matrix, edge_lengths)
 
 
 # betaMODIF = betaMODIF*beta/np.mean(PROPENS) # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+# betaMODIF = beta * np.mean(degs)/np.max(degs)
+
 
 
 # +++++++++++++++++++++ Do Simulations +++++++++++++++++++++
@@ -689,7 +695,8 @@ for IdxSimul in range(NumSimuls):
 total = (time.time() - init)/NumSimuls
 print('Total avrg. 1Run exec-time: ' + str(total) + ' [s]')
 
-plt.figure()
+plt.figure(3)
+plt.clf()
 plt.plot(PROPENS, 'o')
 plt.grid()
 plt.title(r"Beta Basic: {:.3f}".format(beta))
@@ -708,7 +715,8 @@ Tvec  = []
 # TIME DOMAIN Simulation Series +++++++++++++++++++++++++
 
 if visual_AllGroups!=-1:
-    fig = plt.figure(4)
+    fig = plt.figure(5)
+    plt.clf()
     ax  = plt.subplot()
     for X_t in X_array:
         
@@ -754,7 +762,8 @@ if visual_AllGroups!=-1:
     plt.show()
 
 
-plt.figure()
+plt.figure(4)
+plt.clf()
 plt.plot(degs, 'o')
 plt.title(r"Degree")
 
@@ -775,26 +784,31 @@ SG = np.max(vplapl) - vplapl_sort[1]
 print('Spectral gap: ', SG)
 
 # plt.pcolor( np.log( ) )
-plt.figure()
+plt.figure(6)
+plt.clf()
 plt.spy(adj_matrix)
 plt.title('adj MX')
 
-plt.figure()
+plt.figure(7)
+plt.clf()
 plt.pcolor(lapl)
 plt.title(r"lapl")
 
 
-plt.figure()
+plt.figure(8)
+plt.clf()
 plt.plot(np.real(vpAdj),'o')
 plt.plot(np.real(vplapl),'o')
 plt.legend(['adj','lapl'])
 plt.grid()
 
-plt.figure()
+plt.figure(9)
+plt.clf()
 plt.pcolor(abs(VPAdj))
 plt.title(r"vec prop ADJ MX")
 
-plt.figure()
+plt.figure(10)
+plt.clf()
 plt.pcolor(abs(VPlapl))
 plt.title(r"vec prop Lapl")
 # %%
