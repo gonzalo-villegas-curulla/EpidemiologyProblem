@@ -525,7 +525,7 @@ beta   = np.float64(0.1)   # Infection ratio
 
 alpha  = np.float64(0.03)  # Recovery rate
 
-N      = np.int32(220)    # Number of nodes
+N      = np.int32(1220)    # Number of nodes
 T      = np.float64(300)   # Time of simulation
 
 NumSimuls   = np.int32(20)
@@ -546,11 +546,11 @@ A  = Lx*Ly # Area
 dh = np.sqrt(A/N) # Regularized grid step
 
 Rthr      = 3*dh  *1.045*np.sqrt(2) # R-distance for node-neighbors
-Excent    = 0*10*dh # Randmzd. particle movement from homogeneous distribution post.
+Excent    = 10*dh # Randmzd. particle movement from homogeneous distribution post.
 BoundDist = 0.9 # Distance of particles to boundaries of domain
 
-Rthr   = 20.045*np.sqrt(2)*dh
-Excent = 6*dh
+Rthr   = 1.045*np.sqrt(2)*dh
+Excent = 0.001*dh
 
 
 #####################################################################
@@ -622,27 +622,7 @@ degs = np.array(myG.degree())
 degs = degs[:,1]
 
 betaMODIF = beta
-betaMODIF = 0.9*beta * np.mean(degs)/np.max(degs) # I LIKE THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-# I_nodes = [int(rg.random()*N)]
-# I_nodes = int(N/2)
-# # I_nodes = [0]
-# R_nodes = []
-
-# states = np.zeros(N, dtype=int) # Default to State=0 everywhere
-# states[I_nodes] = 1
-# states[R_nodes] = 2
-
-# nx.set_node_attributes(myG, 'state', 0)
-# for i,state in enumerate(states):
-#     myG.nodes[i]['state'] = state
-# _ = FirstReac_SIR(myG, betaMODIF, alpha, T, adj_matrix, edge_lengths)
-
-
-# betaMODIF = betaMODIF*beta/np.mean(PROPENS) # <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-# betaMODIF = beta * np.mean(degs)/np.max(degs)
-
+betaMODIF = 0.88*beta * np.mean(degs)/np.max(degs) 
 
 
 # +++++++++++++++++++++ Do Simulations +++++++++++++++++++++
@@ -670,8 +650,8 @@ for IdxSimul in range(NumSimuls):
     G = myG.copy()
 
     I_nodes = [int(rg.random()*N)]
-    I_nodes = int(N/2)
-    # I_nodes = [0]
+    # I_nodes = int(N/2)
+    I_nodes = [0]
     R_nodes = []
 
     states = np.zeros(N, dtype=int) # Default to State=0 everywhere
@@ -762,13 +742,13 @@ if visual_AllGroups!=-1:
     plt.show()
 
 
-plt.figure(4)
-plt.clf()
-plt.plot(degs, 'o')
-plt.title(r"Degree")
+# plt.figure(4)
+# plt.clf()
+# plt.plot(degs, 'o')
+# plt.title(r"Degree")
 
 
-print('PROPENS. Mean: ', np.mean(PROPENS), '. STD: ', np.std(PROPENS), '. MED: ', np.median(PROPENS))
+print('PROPENS. Mean: ', np.mean(PROPENS), '. STD: ', np.std(PROPENS))
 print('PropensMean/Beta: ', np.mean(PROPENS)/beta)
 # 29/05/2024
 
@@ -806,11 +786,15 @@ plt.figure(9)
 plt.clf()
 plt.pcolor(abs(VPAdj))
 plt.title(r"vec prop ADJ MX")
+plt.colorbar()
 
 plt.figure(10)
 plt.clf()
 plt.pcolor(abs(VPlapl))
 plt.title(r"vec prop Lapl")
+plt.colorbar()
+plt.show()
+
 # %%
 
 

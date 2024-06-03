@@ -82,6 +82,16 @@ The nodes may be distributed homogeneously, regularly, arbitrarily (this is fram
 * Moments and applications of `k`:
 
 
+#### Hypothesis for correspondance between ODE's system and Gillespie system:
+* Well-mixed population network: any infected node can infect any susceptible node. In other words, increased average degree
+* Initialisation of the infection at the center of the domain
+* Large population size $N$
+* Previous two conditions together: pseudo-free propagation
+
+1. What is the effect of the borders? What condition models it?
+
+
+
 
 ### Further investigations
 
