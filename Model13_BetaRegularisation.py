@@ -488,8 +488,8 @@ def do_tessellation(Lx_, Ly_, positions_, R_):
     if visual_VDtessellation:
         ax = plt.gca()
         ax.axis('equal')
-        plt.xlabel(r"Domaine [m]")
-        plt.ylabel(r"Domaine [m]")
+        plt.xlabel(r"Domain [m]")
+        plt.ylabel(r"Domain [m]")
         plt.show()
 
     adj_matrix_ = compute_adjacency_matrix(positions_, R_)
@@ -525,7 +525,7 @@ beta   = np.float64(0.1)   # Infection ratio
 
 alpha  = np.float64(0.03)  # Recovery rate
 
-N      = np.int32(1220)    # Number of nodes
+N      = np.int32(500)    # Number of nodes
 T      = np.float64(300)   # Time of simulation
 
 NumSimuls   = np.int32(20)
@@ -609,7 +609,7 @@ if visual_NTWX:
     nx.draw(myG, pos=position_dict, with_labels=True)
     ax = plt.gca()
     ax.axis('equal')
-    plt.title("Réseau arpès correction")
+    plt.title("Network after neighboring correction")
     plt.show()
 
 kmean = np.mean(np.sum(adj_matrix,axis=1))
@@ -622,7 +622,7 @@ degs = np.array(myG.degree())
 degs = degs[:,1]
 
 betaMODIF = beta
-betaMODIF = 0.88*beta * np.mean(degs)/np.max(degs) 
+betaMODIF = 0.999*beta * np.mean(degs)/np.max(degs) 
 
 
 # +++++++++++++++++++++ Do Simulations +++++++++++++++++++++
@@ -728,16 +728,16 @@ if visual_AllGroups!=-1:
             # plt.plot([thisT,thisT],[0,N],':k', alpha=0.125) # <<<<<<<<< Imax
             legends = [r'$N_I$']     
             ax.legend(legends)
-    print('T(Imax) moyen: ', np.mean(TIMAX))   
-    print('Imax moyen: ', np.mean(IMAX), " (Imax/N: ",np.mean(IMAX)/N,")" )
+    print('T(Imax) mean: ', np.mean(TIMAX))   
+    print('Imax mean: ', np.mean(IMAX), " (Imax/N: ",np.mean(IMAX)/N,")" )
 
      
     plt.plot(tdet, Idet, 'k')   
-    plt.xlabel(r"Temps [jours]")
-    plt.ylabel(r"Numéro de cas")
+    plt.xlabel(r"Time [days]")
+    plt.ylabel(r"Number of cases")
     degs = np.array(myG.degree())
     degs = degs[:,1]
-    plt.title(r"Solutions SIR Gillespie. Degré moyen: {:.2f}".format(np.mean(degs)))
+    plt.title(r"Solutions SIR Gillespie. Average degree: {:.2f}".format(np.mean(degs)))
     plt.xlim((0,T))
     plt.show()
 
@@ -764,15 +764,17 @@ SG = np.max(vplapl) - vplapl_sort[1]
 print('Spectral gap: ', SG)
 
 # plt.pcolor( np.log( ) )
-plt.figure(6)
-plt.clf()
-plt.spy(adj_matrix)
-plt.title('adj MX')
+if 0:
+    plt.figure(6)
+    plt.clf()
+    plt.spy(adj_matrix)
+    plt.title('adj MX')
 
-plt.figure(7)
-plt.clf()
-plt.pcolor(lapl)
-plt.title(r"lapl")
+if 0:
+    plt.figure(7)
+    plt.clf()
+    plt.pcolor(lapl)
+    plt.title(r"lapl")
 
 
 plt.figure(8)
@@ -782,18 +784,28 @@ plt.plot(np.real(vplapl),'o')
 plt.legend(['adj','lapl'])
 plt.grid()
 
-plt.figure(9)
-plt.clf()
-plt.pcolor(abs(VPAdj))
-plt.title(r"vec prop ADJ MX")
-plt.colorbar()
+if 0:
+    plt.figure(9)
+    plt.clf()
+    plt.pcolor(abs(VPAdj))
+    plt.title(r"vec prop ADJ MX")
+    pu = np.mean(abs(VPAdj))
+    pa = np.std(abs(VPAdj))
+    plt.clim(pu-pa,pu+pa)
+    plt.colorbar()
+    axhh = plt.gca()
 
-plt.figure(10)
-plt.clf()
-plt.pcolor(abs(VPlapl))
-plt.title(r"vec prop Lapl")
-plt.colorbar()
-plt.show()
+
+if 0:
+    plt.figure(10)
+    plt.clf()
+    plt.pcolor(abs(VPlapl))
+    plt.title(r"vec prop Lapl")
+    plt.colorbar()
+    pu = np.mean(abs(VPlapl)) 
+    pa = np.std(abs(VPlapl))
+    plt.clim(pu-pa,pu+pa)
+    plt.show()
 
 # %%
 
@@ -837,7 +849,7 @@ for idx in range(NumSimuls):
     except:
         continue
             
-plt.title(r"Espace de phase")    
+plt.title(r"Phase space")    
 plt.xlabel(r"S(t)")
 plt.ylabel(r"I(t)")
 
@@ -873,9 +885,9 @@ plt.plot(   np.log( T[IDXsel,:]),  np.log(selec),'o')
 
 plt.ylim((-7.5,7.5))
 plt.grid()
-plt.xlabel(r" Temps log")
+plt.xlabel(r" Time log")
 plt.ylabel(r"I/S log")
-plt.title(r"I sur S")
+plt.title(r"I over S")
 
 
 # EIGENVALUES: adjMX et Laplacian(adjMX) ================================
@@ -884,7 +896,7 @@ vpAdj, VPAdj = np.linalg.eig(adj_matrix)
 plt.figure()
 
 plt.plot(vpAdj, 'bo')
-plt.title('Valeurs propres')
+plt.title('Eigenvalues')
 
 lapl = nx.laplacian_matrix(myG)
 lapl = lapl.toarray()
@@ -892,7 +904,7 @@ vpLapl, VPLapl = np.linalg.eig(lapl)
 
 
 plt.plot(vpLapl,'ro')
-plt.legend([r'Adj MX',r'Laplacien de AdjMX'])
+plt.legend([r'Adj MX',r'Laplacian of AdjMX'])
 
 
 # EIGENVECS Adj MX ====================================
@@ -906,7 +918,7 @@ vecdata = np.abs(VPAdj)
 plt.pcolor( np.log(vecdata/np.mean(vecdata) + 1e-6) )
 plt.colorbar()
 plt.clim((-2, 2))
-plt.title(r"Vecteurs propres Matrice Adjacence")
+plt.title(r"Eigenvectors of Adjacency MX")
 
 
 # EIGENVECS Lapl(Adj) MX ====================================
@@ -920,7 +932,7 @@ vecdata = np.abs(VPLapl)
 plt.pcolor( np.log(vecdata/np.mean(vecdata) + 1e-6) )
 plt.colorbar()
 plt.clim((-4, 2))
-plt.title(r"Vects. propres Laplacien de l'adjacence")
+plt.title(r"Eigenvectors of Laplacian of the Adj MX")
 
 
 # QUIVER EIGENVECS ===================================================
@@ -941,7 +953,7 @@ if 0:
 meandeg = np.mean(degs)
 Ro_estim = ((np.var(degs)+(np.mean(degs))**2))/np.mean(degs) - 1
 print('(NTWRK) Av Node k-degree: ', meandeg)
-print('Ro estime: ', Ro_estim)
+print('Ro estimate: ', Ro_estim)
 print('Fitted slope I/S: ', np.nanmean(fits[:,0]))
 
 S_o = N-1
@@ -972,7 +984,7 @@ ISCONNECTED = nx.is_connected(myG)
 clust = nx.clustering(myG)
 plt.figure()
 plt.plot(clust.values(),'o')
-plt.title('Réseau: clustering coefficients')
+plt.title('Network: clustering coefficients')
 
 np.mean(list(clust.values()))
 avclust = nx.average_clustering(myG)
@@ -981,19 +993,19 @@ betw = list(betw.values())
 
 plt.figure() 
 plt.plot(list(betw),'o')
-plt.title('Réseau: betweenness centrality')
+plt.title('Network: betweenness centrality')
 
 
 # Propensity history ====================================
 plt.figure()
 plt.plot(PROPENS/beta,'o')
-plt.ylabel(r"Propensité/beta")
-plt.title(r"Propensités par rapport à $\beta$")
+plt.ylabel(r"Propensity/beta")
+plt.title(r"Propensities with respecto to $\beta$")
 
 # Adj Matrix ==========================
 plt.figure()
 plt.spy(adj_matrix)
-plt.title(r"Matrice Adjacence")
+plt.title(r"Adjacency MX")
 
 
 
@@ -1022,10 +1034,10 @@ poisson = np.exp(-kmean) * (kmean**kvec) / scipy.special.factorial(kvec)
 
 plt.plot( np.log10(kvec), np.log10(poisson),'r'  )
 
-plt.legend([r'Réseau generé',r'Distribution Poisson'])
-plt.xlabel('Degré $k$ (log10)')
+plt.legend([r'Generated networ',r'Poisson Distribution'])
+plt.xlabel('Degree $k$ (log10)')
 plt.ylabel('$p_k$ (log 10)')
-plt.title(r"Distribution de degré pour N={}".format(N) )
+plt.title(r"Distribution of degree for N={}".format(N) )
 plt.grid()
 
 plt.gca().set_xticks([0, 0.5, 1])
