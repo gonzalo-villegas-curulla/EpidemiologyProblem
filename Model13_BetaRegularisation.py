@@ -26,7 +26,7 @@ from Model01_func import Model01_func
 
 # from rk4 import rk4
 
-def calc_propensities(G, beta, alpha, adj_matrix, edge_lengths):
+def NETW_INIT(G, beta, alpha, adj_matrix, edge_lengths):
     
     N = len(G)
     
@@ -78,7 +78,7 @@ def calc_propensities(G, beta, alpha, adj_matrix, edge_lengths):
 
 ######################################################
 
-def next_event(G):
+def TRIG_NEXT_EVENT(G):
     
     '''Input: the network G.
     Output: selected reaction channel, i_selected, and the waiting time until the event, tau.'''
@@ -97,7 +97,7 @@ def next_event(G):
 
 ########################################################
 
-def update_states(G, X, tau, i_selected, adj_matrix, edge_lengths):
+def UPDATE_STATES(G, X, tau, i_selected, adj_matrix, edge_lengths):
     # global global_iteration_count
     # State counts:
     global PROPENS
@@ -257,7 +257,7 @@ def save_figure(SAVINGFIG):
 ########################################################
 
 
-def FirstReac_SIR(G, beta, alpha, T, adj_matrix, edge_lengths):
+def SIR_SOLVER_FIRSTREAC(G, beta, alpha, T, adj_matrix, edge_lengths):
         
     # Initialization
     node_states = nx.get_node_attributes(G, 'state')
@@ -269,7 +269,7 @@ def FirstReac_SIR(G, beta, alpha, T, adj_matrix, edge_lengths):
     R = N - S - I 
     
     # Intialise node propensities:
-    calc_propensities(G, beta, alpha, adj_matrix, edge_lengths)    
+    NETW_INIT(G, beta, alpha, adj_matrix, edge_lengths)    
 
     # Set time t=0:
     t = 0
@@ -287,13 +287,13 @@ def FirstReac_SIR(G, beta, alpha, T, adj_matrix, edge_lengths):
             break
         
         # First reaction event sampling ++++++++++++++++++++
-        i, tau = next_event(G) 
+        i, tau = TRIG_NEXT_EVENT(G) 
         
         # Advance wall time:
         t += tau
 
         # Perform update:++++++++++++++++++++++++++++++++++++++
-        [S, I, R] = update_states(G, [S, I, R], tau, i, adj_matrix, edge_lengths)
+        [S, I, R] = UPDATE_STATES(G, [S, I, R], tau, i, adj_matrix, edge_lengths)
         
         # Store results: +++++++++++++++++++++
         X_t.append([t, S, I, R])
@@ -303,8 +303,9 @@ def FirstReac_SIR(G, beta, alpha, T, adj_matrix, edge_lengths):
 
 ########################################################
 
-# Fragments from stackexchange and github (links in PDF document)
-def voronoi_polygons(voronoi, diameter):
+# REPORT SOURCE OF CODE
+
+def VORONOI_POLYGONS(voronoi, diameter):
     
     centroid = voronoi.points.mean(axis=0)
 
@@ -359,7 +360,7 @@ def voronoi_polygons(voronoi, diameter):
 
 ########################################################
 
-def compute_adjacency_matrix(positions, R_threshold):
+def COMPUTE_ADJACENCY_MATRIX(positions, R_threshold):
     N = len(positions)
     distances = squareform(pdist(positions))
     adj_matrix = np.zeros((N, N), dtype=bool)
@@ -376,7 +377,7 @@ def compute_adjacency_matrix(positions, R_threshold):
 ########################################################
 
 
-def compute_edge_lengths(positions, boundedpols, adj_matrix):
+def COMPUTE_EDGE_LENGTHS(positions, boundedpols, adj_matrix):
     N = len(positions)
     edge_lengths = {}
 
@@ -390,7 +391,7 @@ def compute_edge_lengths(positions, boundedpols, adj_matrix):
         for neighbor in neighbors:
             
             try:
-                edge_length, touchflag = find_shared_edge(polygon, boundedpols[neighbor], i, neighbor)
+                edge_length, touchflag = FIND_SHARED_EDGE(polygon, boundedpols[neighbor], i, neighbor)
                 if touchflag:
                     edge_lengths[(i, neighbor)] = edge_length
             except:
@@ -406,7 +407,7 @@ def compute_edge_lengths(positions, boundedpols, adj_matrix):
 
 
 ########################################################
-def find_shared_edge(polygon1, polygon2, i, neighbor):
+def FIND_SHARED_EDGE(polygon1, polygon2, i, neighbor):
     
     # Impose condition de voisinage
     touchflag = 0
@@ -456,7 +457,7 @@ def find_shared_edge(polygon1, polygon2, i, neighbor):
 
 ########################################################
 
-def do_tessellation(Lx_, Ly_, positions_, R_):
+def DO_TESSELLATION(Lx_, Ly_, positions_, R_):
     
     boundary = np.array([[0, 0], [Lx_,0], [Lx_,Ly_], [0,Ly_]])
     x_, y_ = boundary.T
@@ -472,7 +473,7 @@ def do_tessellation(Lx_, Ly_, positions_, R_):
     boundedpols      = []
     diameter_        = np.linalg.norm(boundary.ptp(axis=0))
 
-    for p_ in voronoi_polygons(Voronoi(positions_), diameter_):
+    for p_ in VORONOI_POLYGONS(Voronoi(positions_), diameter_):
         x, y = zip(*p_.intersection(boundary_polygon).exterior.coords)
         
         if visual_VDtessellation:
@@ -492,11 +493,11 @@ def do_tessellation(Lx_, Ly_, positions_, R_):
         plt.ylabel(r"Domain [m]")
         plt.show()
 
-    adj_matrix_ = compute_adjacency_matrix(positions_, R_)
+    adj_matrix_ = COMPUTE_ADJACENCY_MATRIX(positions_, R_)
 
     # Compute shared adjacent edge lengths 
     # Correct adjacency matrix if needed based on direct neighbor contact
-    edge_lengthsOUT, adj_matrixOUT = compute_edge_lengths(positions_, boundedpols, adj_matrix_)
+    edge_lengthsOUT, adj_matrixOUT = COMPUTE_EDGE_LENGTHS(positions_, boundedpols, adj_matrix_)
     
     return edge_lengthsOUT, adj_matrixOUT, boundedpols
 
@@ -518,24 +519,23 @@ counter = 0
 PROPENS = []
     
 # +++++++++++++++++++++ SIMUALTION PARAMETERS: +++++++++++++++++++++++++++++
-seed = 42                     # Set seed of PRNG state 
-rg   = Generator(PCG64(seed))  # Initialize bit generator (here PCG64) with seed
+seed   = 42                     # Set seed of PRNG state 
+rg     = Generator(PCG64(seed))  # Initialize bit generator (here PCG64) with seed
 
-beta   = np.float64(0.1)   # Infection ratio
-
+beta   = np.float64(0.1)   # Infection rate
 alpha  = np.float64(0.03)  # Recovery rate
 
-N      = np.int32(500)    # Number of nodes
+N      = np.int32(100)    # Number of nodes
 T      = np.float64(300)   # Time of simulation
 
-NumSimuls   = np.int32(20)
+NumSimuls   = np.int32(15)
 
 visual_time           = 0 # Visualize network infection in time steps
 visual_SaveVideo      = 0 # [CAREFULL!!!], it takes hours
-visual_NTWX           = 1 # View networkx object
-visual_VDtessellation = 1 # See Voronoi tessellation of domain
+visual_NTWX           = 1 # Visualize networkx
+visual_VDtessellation = 1 # View Voronoi tessellation of domain
 use_VDcontact         = 0 # Use contact surface/edge for transmission propensity
-visual_AllGroups      = 0 # See S-I-R (1), only (I) if (0), (-1) for none 
+visual_AllGroups      = 0 # VIew: S-I-R with (1), I(t) with (0), none with (-1)
 
 
 ## +++++++++++++++++++++ PARMETERS DOMAIN GRID +++++++++++++++++++++
@@ -601,7 +601,7 @@ for i in range(num_nodes):
 
 
 # +++++++++++++++++++++ Tessellate domain +++++++++++++++++++++
-edge_lengths, adj_matrix, boundedpols = do_tessellation(Lx, Ly, positions, Rthr)
+edge_lengths, adj_matrix, boundedpols = DO_TESSELLATION(Lx, Ly, positions, Rthr)
 
 if visual_NTWX:
     plt.figure(2)
@@ -663,7 +663,7 @@ for IdxSimul in range(NumSimuls):
         G.nodes[i]['state'] = state
 
 
-    X_t, Sinf[IdxSimul] = FirstReac_SIR(G, betaMODIF, alpha, T, adj_matrix, edge_lengths)
+    X_t, Sinf[IdxSimul] = SIR_SOLVER_FIRSTREAC(G, betaMODIF, alpha, T, adj_matrix, edge_lengths)
     X_array.append(X_t)
 
     if flagonce:
