@@ -525,7 +525,7 @@ rg     = Generator(PCG64(seed))  # Initialize bit generator (here PCG64) with se
 beta   = np.float64(0.1)   # Infection rate
 alpha  = np.float64(0.03)  # Recovery rate
 
-N      = np.int32(100)    # Number of nodes
+N      = np.int32(1000)    # Number of nodes
 T      = np.float64(300)   # Time of simulation
 
 NumSimuls   = np.int32(15)
@@ -551,6 +551,9 @@ BoundDist = 0.9 # Distance of particles to boundaries of domain
 
 Rthr   = 2.045*np.sqrt(2)*dh
 Excent = 1.005*dh
+
+Rthr   = 20.045*np.sqrt(2)*dh
+Excent = 15.005*dh
 
 
 #####################################################################
@@ -616,13 +619,16 @@ kmean = np.mean(np.sum(adj_matrix,axis=1))
 print('(AdjMX) kmean: ', kmean)
 
 
-#  ++++++++++++++++++++ Rectify Beta for conservation ++++++++++++++++++++++
+#  ++++++++++++++++++++ ++++++++++++++++++++ ++++++++++++++++++++ ++++++++++++
+#  ++++++++++++++++++++ ReCtiFy BeTa For CoNseRvaTioN ++++++++++++++++++++++
+#  ++++++++++++++++++++ ++++++++++++++++++++ ++++++++++++++++++++ ++++++++++++
+
 
 degs = np.array(myG.degree())
 degs = degs[:,1]
 
 betaMODIF = beta
-betaMODIF = 0.999*beta * np.mean(degs)/np.max(degs) 
+betaMODIF = 1.0*beta * np.mean(degs)/np.max(degs) 
 
 
 # +++++++++++++++++++++ Do Simulations +++++++++++++++++++++
