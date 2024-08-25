@@ -14,7 +14,8 @@ from collections import defaultdict
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Polygon as pltPolygon
 import os    
-from networkx_robustness import networkx_robustness
+# from networkx_robustness import networkx_robustness
+# from networkx import networkx_robustness
 from Model01_func import Model01_func 
 
     

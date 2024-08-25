@@ -525,14 +525,14 @@ rg     = Generator(PCG64(seed))  # Initialize bit generator (here PCG64) with se
 beta   = np.float64(0.1)   # Infection rate
 alpha  = np.float64(0.03)  # Recovery rate
 
-N      = np.int32(1000)    # Number of nodes
+N      = np.int32(2000)    # Number of nodes
 T      = np.float64(300)   # Time of simulation
 
 NumSimuls   = np.int32(15)
 
 visual_time           = 0 # Visualize network infection in time steps
 visual_SaveVideo      = 0 # [CAREFULL!!!], it takes hours
-visual_NTWX           = 1 # Visualize networkx
+visual_NTWX           = 0 # Visualize networkx
 visual_VDtessellation = 1 # View Voronoi tessellation of domain
 use_VDcontact         = 0 # Use contact surface/edge for transmission propensity
 visual_AllGroups      = 0 # VIew: S-I-R with (1), I(t) with (0), none with (-1)
@@ -552,8 +552,9 @@ BoundDist = 0.9 # Distance of particles to boundaries of domain
 Rthr   = 2.045*np.sqrt(2)*dh
 Excent = 1.005*dh
 
-Rthr   = 20.045*np.sqrt(2)*dh
-Excent = 15.005*dh
+Rthr      = 5.045*np.sqrt(2)*dh
+Excent    = 0.005*dh
+BoundDist = dh
 
 
 #####################################################################
